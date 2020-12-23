@@ -240,7 +240,6 @@ namespace Turniej
                     if (sqlDataReader1.IsDBNull(3))
                     {
                         totalWinPointsTeam2 = 1;
-
                     }
                     else
                     {
