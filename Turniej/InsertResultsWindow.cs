@@ -35,12 +35,10 @@ namespace Turniej
 
         private void saveResultButton_Click(object sender, EventArgs e)
         {
-            string selectedTeam1 = teamNameList1.SelectedItem.ToString();
-            string selectedTeam2 = teamNameList2.SelectedItem.ToString();
+            String selectedTeam1 = teamNameList1.SelectedItem.ToString();
+            String selectedTeam2 = teamNameList2.SelectedItem.ToString();
 
             ConnectionData connectionData = new ConnectionData();
-
-            Console.WriteLine(selectedTeam1);
 
             String query1 = "SELECT * FROM teams WHERE name = '" + selectedTeam1 + "'";
             String query2 = "SELECT * FROM teams WHERE name = '" + selectedTeam2 + "'";
@@ -62,37 +60,71 @@ namespace Turniej
                 String query4 = "SELECT * FROM q" + i + " WHERE id_team = " + idTeam2;
 
                 SqlDataReader sqlDataReader3 = connectionData.SendInquiry(query3);
-                int idInTable1 = sqlDataReader3.GetInt32(0);
+                int idInTable1 = 0;
+                int idInTable2 = 0;
+
+                if (sqlDataReader3.HasRows)
+                {
+                    idInTable1 = sqlDataReader3.GetInt32(0);
+
+                    if (idInTable1 != 0)
+                    {
+                        numberTable1 = i;
+                    }
+                }
                 connectionData.closeConnection();
 
                 SqlDataReader sqlDataReader4 = connectionData.SendInquiry(query4);
-                int idInTable2 = sqlDataReader4.GetInt32(0);
+
+                if (sqlDataReader4.HasRows)
+                { 
+                    idInTable2 = sqlDataReader4.GetInt32(0);
+
+                    Console.WriteLine("idintable2"+idInTable2);
+
+                    if (idInTable2 != 0)
+                    {
+                        numberTable2 = i;
+                    }
+                }
                 connectionData.closeConnection();
 
-                if (numberTable1 != 0)
-                {
-                    if (idInTable1 != null)
-                    {
-                        numberTable1 = i;
-                    }
-                }
-
-                if (numberTable2 != 0)
-                {
-                    if (idInTable2 != null)
-                    {
-                        numberTable1 = i;
-                    }
-                }
-
                 if (numberTable1 != 0 && numberTable2 != 0)
-                {
+                {             
                     break;
                 }
             }
 
-            Console.WriteLine(numberTable1);
-            Console.WriteLine(numberTable2);
+            Console.WriteLine("numberTable1: " + numberTable1);
+            Console.WriteLine("numberTable2: " + numberTable2);
+
+            if (numberOfGoalsTextBox1 != null && numberOfGoalsTextBox2 != null)
+            {
+                // 3 points for win, 1 point for draw and 0 for lost
+                int numberOfGoalsTeam1 = Int32.Parse(numberOfGoalsTextBox1.Text);
+                int numberOfGoalsTeam2 = Int32.Parse(numberOfGoalsTextBox2.Text);
+
+                if (numberOfGoalsTeam1 > numberOfGoalsTeam2)
+                {
+
+                }
+
+                if (numberOfGoalsTeam1 == numberOfGoalsTeam2)
+                {
+
+                }
+
+                if (numberOfGoalsTeam1 < numberOfGoalsTeam2)
+                {
+
+                }
+
+                String query5 = "UPDATE" + numberTable1 + "SET " + idTeam1;
+                String query6 = "SELECT * FROM q" + numberTable2 + " WHERE id_team = " + idTeam2;
+            } else
+            {
+
+            }
         }
 
         private void updateList()
