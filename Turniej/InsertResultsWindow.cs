@@ -47,8 +47,8 @@ namespace Turniej
             int idTeam1 = sqlDataReader1.GetInt32(0);
             connectionData.closeConnection();
 
-            SqlDataReader sqlDataReader2 = connectionData.SendInquiry(query2);
-            int idTeam2 = sqlDataReader2.GetInt32(0);
+            sqlDataReader1 = connectionData.SendInquiry(query2);
+            int idTeam2 = sqlDataReader1.GetInt32(0);
             connectionData.closeConnection();
           
             int numberTable1 = 0;
@@ -59,13 +59,13 @@ namespace Turniej
                 String query3 = "SELECT * FROM q" + i + " WHERE id_team = " + idTeam1;
                 String query4 = "SELECT * FROM q" + i + " WHERE id_team = " + idTeam2;
 
-                SqlDataReader sqlDataReader3 = connectionData.SendInquiry(query3);
+                sqlDataReader1 = connectionData.SendInquiry(query3);
                 int idInTable1 = 0;
                 int idInTable2 = 0;
 
-                if (sqlDataReader3.HasRows)
+                if (sqlDataReader1.HasRows)
                 {
-                    idInTable1 = sqlDataReader3.GetInt32(0);
+                    idInTable1 = sqlDataReader1.GetInt32(0);
 
                     if (idInTable1 != 0)
                     {
@@ -74,13 +74,11 @@ namespace Turniej
                 }
                 connectionData.closeConnection();
 
-                SqlDataReader sqlDataReader4 = connectionData.SendInquiry(query4);
+                sqlDataReader1 = connectionData.SendInquiry(query4);
 
-                if (sqlDataReader4.HasRows)
+                if (sqlDataReader1.HasRows)
                 { 
-                    idInTable2 = sqlDataReader4.GetInt32(0);
-
-                    Console.WriteLine("idintable2"+idInTable2);
+                    idInTable2 = sqlDataReader1.GetInt32(0);
 
                     if (idInTable2 != 0)
                     {
@@ -98,32 +96,186 @@ namespace Turniej
             Console.WriteLine("numberTable1: " + numberTable1);
             Console.WriteLine("numberTable2: " + numberTable2);
 
+            // Adding results
+
             if (numberOfGoalsTextBox1 != null && numberOfGoalsTextBox2 != null)
             {
                 // 3 points for win, 1 point for draw and 0 for lost
+                int totalPointsTeam1 = 0;
+                int totalPointsTeam2 = 0;
+
+                int totalWinPointsTeam1 = 0;
+                int totalWinPointsTeam2 = 0;
+
+                int totalLostPointsTeam1 = 0;
+                int totalLostPointsTeam2 = 0;
+
+                int totalDrawPointsTeam1 = 0;
+                int totalDrawPointsTeam2 = 0;
+
                 int numberOfGoalsTeam1 = Int32.Parse(numberOfGoalsTextBox1.Text);
                 int numberOfGoalsTeam2 = Int32.Parse(numberOfGoalsTextBox2.Text);
-
+  
                 if (numberOfGoalsTeam1 > numberOfGoalsTeam2)
                 {
+                    String query5 = "SELECT * FROM q" + numberTable1 + " WHERE id_team = " + idTeam1;
 
+                    sqlDataReader1 = connectionData.SendInquiry(query5);
+                    
+                    if (sqlDataReader1.IsDBNull(2))
+                    {
+                        totalPointsTeam1 = 3;
+
+                    } else
+                    {
+                        totalPointsTeam1 = sqlDataReader1.GetInt32(2) + 3;
+                    }
+
+                    if (sqlDataReader1.IsDBNull(3))
+                    {
+                        totalWinPointsTeam1 = 1;
+
+                    } else
+                    {
+                        totalWinPointsTeam1 = sqlDataReader1.GetInt32(3) + 1;
+                    }
+
+                    connectionData.closeConnection();
+
+                    String query6 = "SELECT * FROM q" + numberTable2 + " WHERE id_team = " + idTeam2;
+
+                    sqlDataReader1 = connectionData.SendInquiry(query6);
+
+                    if (sqlDataReader1.IsDBNull(5))
+                    {
+                        totalLostPointsTeam2 = 1;
+                    }
+                    else
+                    {
+                        totalLostPointsTeam2 = sqlDataReader1.GetInt32(5) + 1;
+                    }
+
+                    connectionData.closeConnection();
+
+                    String query7 = "UPDATE q" + numberTable1 + " SET points_scored = " + totalPointsTeam1 + ", win = " + totalWinPointsTeam1 + " WHERE id_team = " + idTeam1;
+                    String query8 = "UPDATE q" + numberTable2 + " SET lost = " + totalLostPointsTeam2 + " WHERE id_team = " + idTeam2;
+
+                    connectionData.setData(query7);
+                    connectionData.setData(query8);
                 }
 
                 if (numberOfGoalsTeam1 == numberOfGoalsTeam2)
                 {
+                    String query9 = "SELECT * FROM q" + numberTable1 + " WHERE id_team = " + idTeam1;
 
+                    sqlDataReader1 = connectionData.SendInquiry(query9);
+
+                    if (sqlDataReader1.IsDBNull(2))
+                    {
+                        totalPointsTeam1 = 1;
+                    }
+                    else
+                    {
+                        totalPointsTeam1 = sqlDataReader1.GetInt32(2) + 1;
+                    }
+
+                    if (sqlDataReader1.IsDBNull(4))
+                    {
+                        totalDrawPointsTeam1 = 1;
+                    }
+                    else
+                    {
+                        totalDrawPointsTeam1 = sqlDataReader1.GetInt32(4) + 1;
+                    }
+
+                    connectionData.closeConnection();
+
+                    String query10 = "SELECT * FROM q" + numberTable2 + " WHERE id_team = " + idTeam2;
+
+                    sqlDataReader1 = connectionData.SendInquiry(query10);
+
+                    if (sqlDataReader1.IsDBNull(2))
+                    {
+                        totalPointsTeam2 = 1;
+                    }
+                    else
+                    {
+                        totalPointsTeam2 = sqlDataReader1.GetInt32(2) + 1;
+                    }
+
+                    if (sqlDataReader1.IsDBNull(4))
+                    {
+                        totalDrawPointsTeam2 = 1;
+                    }
+                    else
+                    {
+                        totalDrawPointsTeam2 = sqlDataReader1.GetInt32(4) + 1;
+                    }
+
+                    connectionData.closeConnection();
+
+                    String query11 = "UPDATE q" + numberTable1 + " SET points_scored = " + totalPointsTeam1 + ", draw = " + totalDrawPointsTeam1 + " WHERE id_team = " + idTeam1;
+                    String query12 = "UPDATE q" + numberTable2 + " SET points_scored = " + totalPointsTeam2 + ", draw = " + totalDrawPointsTeam2 + " WHERE id_team = " + idTeam2;
+
+                    connectionData.setData(query11);
+                    connectionData.setData(query12);
                 }
 
                 if (numberOfGoalsTeam1 < numberOfGoalsTeam2)
                 {
+                    String query13 = "SELECT * FROM q" + numberTable2 + " WHERE id_team = " + idTeam2;
 
+                    sqlDataReader1 = connectionData.SendInquiry(query13);
+
+                    if (sqlDataReader1.IsDBNull(2))
+                    {
+                        totalPointsTeam2 = 3;
+                        Console.WriteLine("hehehe"+totalPointsTeam2);
+                    }
+                    else
+                    {
+                        totalPointsTeam2 = sqlDataReader1.GetInt32(2) + 3;
+                    }
+
+                    if (sqlDataReader1.IsDBNull(3))
+                    {
+                        totalWinPointsTeam2 = 1;
+
+                    }
+                    else
+                    {
+                        totalWinPointsTeam2 = sqlDataReader1.GetInt32(3) + 1;
+                    }
+
+                    connectionData.closeConnection();
+
+                    String query14 = "SELECT * FROM q" + numberTable1 + " WHERE id_team = " + idTeam1;
+
+                    sqlDataReader1 = connectionData.SendInquiry(query14);
+
+                    if (sqlDataReader1.IsDBNull(5))
+                    {
+                        totalLostPointsTeam1 = 1;
+                    }
+                    else
+                    {
+                        totalLostPointsTeam1 = sqlDataReader1.GetInt32(5) + 1;
+                    }
+
+                    connectionData.closeConnection();
+
+                    String query15 = "UPDATE q" + numberTable2 + " SET points_scored = " + totalPointsTeam2 + ", win = " + totalWinPointsTeam2 + " WHERE id_team = " + idTeam2;
+                    String query16 = "UPDATE q" + numberTable1 + " SET lost = " + totalLostPointsTeam1 + " WHERE id_team = " + idTeam1;
+
+                    connectionData.setData(query15);
+                    connectionData.setData(query16);
                 }
 
-                String query5 = "UPDATE" + numberTable1 + "SET " + idTeam1;
-                String query6 = "SELECT * FROM q" + numberTable2 + " WHERE id_team = " + idTeam2;
+                MessageBox.Show("Added result !");
+
             } else
             {
-
+                MessageBox.Show("Insert goals !");
             }
         }
 
