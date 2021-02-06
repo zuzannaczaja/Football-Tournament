@@ -41,7 +41,8 @@ namespace Turniej
 
         private void groupPhaseButton_Click(object sender, EventArgs e)
         {
-
+            var openWindow = new GroupPhaseWindow();
+            openWindow.Show();
         }
 
         private void knockoutStageButton_Click(object sender, EventArgs e)

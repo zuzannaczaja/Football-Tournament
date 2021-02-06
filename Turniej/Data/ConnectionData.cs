@@ -14,8 +14,6 @@ namespace Turniej.Data
 {
     class ConnectionData
     {
-        //private String strConnection = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\Projekty\\C#\\Turniej\\Turniej\\Turniej\\Data\\Football.mdf;Integrated Security=True";
-
         SqlConnection sqlConnection;
         SqlDataReader reader;
 
