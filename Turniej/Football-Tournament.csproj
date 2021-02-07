@@ -47,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\ConnectionData.cs" />
+    <Compile Include="KnockoutStageWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KnockoutStageWindow.Designer.cs">
+      <DependentUpon>KnockoutStageWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="GroupPhaseWindow.cs">
       <SubType>Form</SubType>
     </Compile>

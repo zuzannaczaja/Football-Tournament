@@ -1,7 +1,7 @@
 ﻿
 namespace Tournament
 {
-    partial class GroupPhaseWindow
+    partial class KnockoutStageWindow
     {
         /// <summary>
         /// Required designer variable.

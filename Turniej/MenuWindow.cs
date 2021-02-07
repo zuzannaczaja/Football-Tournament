@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using Turniej.Data;
+using Tournament.Data;
 
 /*
  * Main Menu
  */
 
-namespace Turniej
+namespace Tournament
 {
     public partial class MenuWindow : Form
     {

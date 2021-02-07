@@ -1,5 +1,5 @@
 ﻿
-namespace Turniej
+namespace Tournament
 {
     partial class MenuWindow
     {

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System;
 
-namespace Turniej
+namespace Tournament
 {
     public partial class GroupPhaseWindow : Form
     {
@@ -212,9 +212,7 @@ namespace Turniej
             }
             catch (SqlException)
             {
-                MessageBox.Show("To run this sample replace connection.ConnectionString" +
-                    " with a valid connection string to a Northwind" +
-                    " database accessible to your system.", "ERROR",
+                MessageBox.Show("Error SqlException", "ERROR",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 System.Threading.Thread.CurrentThread.Abort();
             }

@@ -8,13 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Turniej.Data;
+using Tournament.Data;
 
 /*
  * Insert teams window
  */
 
-namespace Turniej
+namespace Tournament
 {
     public partial class InsertTeamsWindow : Form
     {

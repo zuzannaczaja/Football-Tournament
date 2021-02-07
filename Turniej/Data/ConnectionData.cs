@@ -10,7 +10,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace Turniej.Data
+namespace Tournament.Data
 {
     class ConnectionData
     {
