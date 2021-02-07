@@ -47,7 +47,8 @@ namespace Tournament
 
         private void knockoutStageButton_Click(object sender, EventArgs e)
         {
-
+            var openWindow = new KnockoutStageWindow();
+            openWindow.Show();
         }
 
         private void deleteAllTournamentButton_Click(object sender, EventArgs e)

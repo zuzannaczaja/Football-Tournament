@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 
-namespace Turniej.Properties
+namespace Tournament.Properties
 {
     /// <summary>
     ///   Silnie typizowana klasa zasobów do wyszukiwania zlokalizowanych ciągów itd.
@@ -43,7 +43,7 @@ namespace Turniej.Properties
             {
                 if ((resourceMan == null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Turniej.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Tournament.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
