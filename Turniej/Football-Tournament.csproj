@@ -85,6 +85,9 @@
     <EmbeddedResource Include="InsertTeamWindow.resx">
       <DependentUpon>InsertTeamWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="KnockoutStageWindow.resx">
+      <DependentUpon>KnockoutStageWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MenuWindow.resx">
       <DependentUpon>MenuWindow.cs</DependentUpon>
     </EmbeddedResource>
