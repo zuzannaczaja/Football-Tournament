@@ -20,7 +20,7 @@ namespace Tournament
             InitializeComponent();
             this.AutoScroll = true;
             this.AutoScrollMinSize = new Size(0, 1000);
-            this.Size = new Size(500, 500);
+            this.Size = new Size(1500, 1500);
             this.Paint += new PaintEventHandler(Form1_Paint);
 
             int initialPointY = 20;
@@ -56,17 +56,23 @@ namespace Tournament
 
             graphicsObj = this.CreateGraphics();
 
-            
-
-            graphicsObj.DrawRectangle(Pens.Black, rectangles[0]);
-
             for (int i = 0; i < rectangles.Count; i++)
             {
-                if (i != rectangles.Count-1)
+                graphicsObj.DrawRectangle(Pens.Black, rectangles[i]);
+            }
+
+            int countToConnect = amountOfTeamsToKnockoutStage / 2;
+
+            for (int i = 0; i < rectangles.Count - 1; i = i + 2)
+            {
+
+                if (i != rectangles.Count)
                 {
-                    //graphicsObj.DrawLine(Pens.Black, new Point(rectangles[i].Right, rectangles[i].Bottom), new Point(rectangles[i + 1].Left, rectangles[i + 1].Top));
-                    graphicsObj.DrawRectangle(Pens.Black, rectangles[i + 1]);
+                    graphicsObj.DrawLine(Pens.Black, new Point(rectangles[i].Right, rectangles[i].Top), new Point(rectangles[i + countToConnect].Left, rectangles[i + countToConnect].Top));
+                    graphicsObj.DrawLine(Pens.Black, new Point(rectangles[i + 1].Right, rectangles[i + 1].Bottom), new Point(rectangles[i + countToConnect].Left, rectangles[i + countToConnect].Bottom));
                 }
+
+                countToConnect--;
             }
 
            // graphicsObj.Invalidate();
