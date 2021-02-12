@@ -68,8 +68,16 @@ namespace Tournament
 
                 if (i != rectangles.Count)
                 {
-                    graphicsObj.DrawLine(Pens.Black, new Point(rectangles[i].Right, rectangles[i].Top), new Point(rectangles[i + countToConnect].Left, rectangles[i + countToConnect].Top));
-                    graphicsObj.DrawLine(Pens.Black, new Point(rectangles[i + 1].Right, rectangles[i + 1].Bottom), new Point(rectangles[i + countToConnect].Left, rectangles[i + countToConnect].Bottom));
+
+                    graphicsObj.DrawLine(
+                        Pens.Black,
+                        new Point(rectangles[i].Right, rectangles[i].Top + ((rectangles[i].Bottom - rectangles[i].Top) / 2)),
+                        new Point(rectangles[i + countToConnect].Left, rectangles[i + countToConnect].Top + ((rectangles[i + countToConnect].Bottom - rectangles[i + countToConnect].Top) / 2)));
+
+                    graphicsObj.DrawLine(
+                        Pens.Black,
+                        new Point(rectangles[i + 1].Right, rectangles[i + 1].Top + ((rectangles[i + 1].Bottom - rectangles[i + 1].Top) / 2)),
+                        new Point(rectangles[i + countToConnect].Left, rectangles[i + countToConnect].Top + ((rectangles[i + countToConnect].Bottom - rectangles[i + countToConnect].Top) / 2)));
                 }
 
                 countToConnect--;
