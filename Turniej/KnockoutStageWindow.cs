@@ -12,27 +12,76 @@ namespace Tournament
 {
     public partial class KnockoutStageWindow : Form
     {
-        public List<Rectangle> rectangles = new List<Rectangle>();
+        public List<Rectangle> rectanglesList = new List<Rectangle>();
+        public List<String> teamNameStringList = new List<String>();
+        public List<String> teamResultStringList = new List<String>();
 
         int amountOfTeamsToKnockoutStage = 16;
         public KnockoutStageWindow()
         {
-            InitializeComponent();
+            InitializeComponent();         
+
+            this.Text = "Football Torunament";
             this.AutoScroll = true;
             this.AutoScrollMinSize = new Size(0, 1000);
             this.Size = new Size(1500, 1500);
-            this.Paint += new PaintEventHandler(Form1_Paint);
+            this.Paint += new PaintEventHandler(KnockoutStageWindow_Paint);
+        }
 
-            int initialPointY = 20;
+        private void KnockoutStageWindow_Paint(object sender, PaintEventArgs e)
+        {
+            InitializeRectangles();
+
+            Graphics graphicsObj;
+
+            graphicsObj = this.CreateGraphics();
+
+            for (int i = 0; i < rectanglesList.Count; i++)
+            {
+                graphicsObj.DrawRectangle(Pens.Black, rectanglesList[i]);
+            }
+
+            int countToConnect = amountOfTeamsToKnockoutStage / 2;
+
+            for (int i = 0; i < rectanglesList.Count - 1; i = i + 2)
+            {
+                if (i != rectanglesList.Count)
+                {
+                    graphicsObj.DrawLine(
+                        Pens.Black,
+                        new Point(rectanglesList[i].Right, rectanglesList[i].Top + ((rectanglesList[i].Bottom - rectanglesList[i].Top) / 2)),
+                        new Point(rectanglesList[i + countToConnect].Left, rectanglesList[i + countToConnect].Top + ((rectanglesList[i + countToConnect].Bottom - rectanglesList[i + countToConnect].Top) / 2)));
+
+                    graphicsObj.DrawLine(
+                        Pens.Black,
+                        new Point(rectanglesList[i + 1].Right, rectanglesList[i + 1].Top + ((rectanglesList[i + 1].Bottom - rectanglesList[i + 1].Top) / 2)),
+                        new Point(rectanglesList[i + countToConnect].Left, rectanglesList[i + countToConnect].Top + ((rectanglesList[i + countToConnect].Bottom - rectanglesList[i + countToConnect].Top) / 2)));
+                }           
+
+                countToConnect--;
+            }
+
+            //graphicsObj.Dispose();
+
+            Graphics formGraphics = this.CreateGraphics();
+            Font drawFont = new Font("Arial", 9);
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            StringFormat drawFormat = new StringFormat();
+
+            int initialPointY = 30;
             int addedValue = 85;
             int dividedValue = 1;
             int count = 1;
 
-            for (int x = 20; x <= ((amountOfTeamsToKnockoutStage / 4) * 170) + 20; x = x + 170)
+            for (int x = 30; x <= ((amountOfTeamsToKnockoutStage / 4) * 170) + 30; x = x + 170)
             {
                 for (int y = initialPointY; y < (((amountOfTeamsToKnockoutStage / 2)) * 85) - (initialPointY); y = y + addedValue)
                 {
-                    rectangles.Add(new Rectangle(x, y, 150, 65));
+                    formGraphics.DrawString("dd", drawFont, drawBrush, x, y, drawFormat);
+                    formGraphics.DrawString("dd", drawFont, drawBrush, x, y + 30, drawFormat);
+
+                    formGraphics.DrawString("w", drawFont, drawBrush, x + 115, y, drawFormat);
+                    formGraphics.DrawString("w", drawFont, drawBrush, x + 115, y + 30, drawFormat);
                 }
 
                 initialPointY = initialPointY + (43 * count);
@@ -43,48 +92,49 @@ namespace Tournament
                 {
                     count = count * count;
 
-                } else
+                }
+                else
                 {
                     count = count + 1;
                 }
             }
+
+            drawFont.Dispose();
+            drawBrush.Dispose();
+            formGraphics.Dispose();
+
+            // graphicsObj.Invalidate();
+            //e.Graphics.TranslateTransform(this.AutoScrollPosition.X, this.AutoScrollPosition.Y);
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void InitializeRectangles()
         {
-            Graphics graphicsObj;
+            int initialPointY = 20;
+            int addedValue = 85;
+            int dividedValue = 1;
+            int count = 1;
 
-            graphicsObj = this.CreateGraphics();
-
-            for (int i = 0; i < rectangles.Count; i++)
+            for (int x = 20; x <= ((amountOfTeamsToKnockoutStage / 4) * 170) + 20; x = x + 170)
             {
-                graphicsObj.DrawRectangle(Pens.Black, rectangles[i]);
-            }
-
-            int countToConnect = amountOfTeamsToKnockoutStage / 2;
-
-            for (int i = 0; i < rectangles.Count - 1; i = i + 2)
-            {
-
-                if (i != rectangles.Count)
+                for (int y = initialPointY; y < (((amountOfTeamsToKnockoutStage / 2)) * 85) - (initialPointY); y = y + addedValue)
                 {
-
-                    graphicsObj.DrawLine(
-                        Pens.Black,
-                        new Point(rectangles[i].Right, rectangles[i].Top + ((rectangles[i].Bottom - rectangles[i].Top) / 2)),
-                        new Point(rectangles[i + countToConnect].Left, rectangles[i + countToConnect].Top + ((rectangles[i + countToConnect].Bottom - rectangles[i + countToConnect].Top) / 2)));
-
-                    graphicsObj.DrawLine(
-                        Pens.Black,
-                        new Point(rectangles[i + 1].Right, rectangles[i + 1].Top + ((rectangles[i + 1].Bottom - rectangles[i + 1].Top) / 2)),
-                        new Point(rectangles[i + countToConnect].Left, rectangles[i + countToConnect].Top + ((rectangles[i + countToConnect].Bottom - rectangles[i + countToConnect].Top) / 2)));
+                    rectanglesList.Add(new Rectangle(x, y, 150, 65));
                 }
 
-                countToConnect--;
-            }
+                initialPointY = initialPointY + (43 * count);
+                addedValue = addedValue + (85 * count);
+                dividedValue = dividedValue * 2;
 
-           // graphicsObj.Invalidate();
-            //e.Graphics.TranslateTransform(this.AutoScrollPosition.X, this.AutoScrollPosition.Y);
+                if (count >= 2)
+                {
+                    count = count * count;
+
+                }
+                else
+                {
+                    count = count + 1;
+                }
+            }
         }
     }
 }
