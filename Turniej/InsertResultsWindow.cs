@@ -230,7 +230,6 @@ namespace Tournament
                     if (sqlDataReader1.IsDBNull(2))
                     {
                         totalPointsTeam2 = 3;
-                        Console.WriteLine("hehehe"+totalPointsTeam2);
                     }
                     else
                     {
