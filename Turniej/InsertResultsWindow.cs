@@ -14,6 +14,7 @@ namespace Tournament
 {
     public partial class InsertResultsWindow : Form
     {
+
         public InsertResultsWindow()
         {
             InitializeComponent();
@@ -300,6 +301,16 @@ namespace Tournament
                 teamNameList1.EndUpdate();
                 teamNameList2.EndUpdate();
             }
+        }
+
+        private void updateBracketTable()
+        {
+            ConnectionData connectionData = new ConnectionData();
+
+           // if ()
+          //  {
+
+           // }
         }
     }
 }

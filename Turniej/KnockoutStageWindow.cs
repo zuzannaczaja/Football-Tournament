@@ -16,7 +16,7 @@ namespace Tournament
         public List<String> teamNameStringList = new List<String>();
         public List<String> teamResultStringList = new List<String>();
 
-        int amountOfTeamsToKnockoutStage = 32;
+        int amountOfTeamsToKnockoutStage = 16;
 
         public KnockoutStageWindow()
         {
@@ -62,8 +62,7 @@ namespace Tournament
 
             drawText(graphicsObj);
         }
-
-        public void drawText(Graphics graphicsObj)
+        private void drawText(Graphics graphicsObj)
         {
             Font drawFont = new Font("Arial", 9);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
@@ -129,6 +128,11 @@ namespace Tournament
                 count = count * 2;
             }
             Console.WriteLine(rectanglesList.Count);
+        }
+
+        private void UpdateDataInBracket()
+        {
+
         }
     }
 }
