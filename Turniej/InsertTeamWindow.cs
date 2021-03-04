@@ -58,7 +58,7 @@ namespace Tournament
                 if (teamNameTextBox.Text != "")
                 {
                     String query2 = "INSERT into teams (id_team, name, description, photo) VALUES('" + amountOfTeams + "','" +
-                            teamNameTextBox.Text + "','" + teamDescriptionTextBox.Text + "','" + teamPhotoTextBox.Text + "')";
+                            teamNameTextBox.Text + "','" + teamDescriptionTextBox.Text + "')";
 
                     connectionData.closeConnection();
                     connectionData.setData(query2);
@@ -70,21 +70,6 @@ namespace Tournament
                     MessageBox.Show("You have to enter the team name.");
                 }
             }         
-        }
-
-        private void browseButton_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            openFileDialog.Filter = "Image Files(*.BMP;*.JPG;*.PNG)|*.BMP;*.JPG;*.PNG";
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string filePath = System.IO.Path.GetFullPath(openFileDialog.FileName);
-                teamPhotoTextBox.Text = filePath;
-            }
         }
 
         private void deleteTeamButton_Click(object sender, EventArgs e)
