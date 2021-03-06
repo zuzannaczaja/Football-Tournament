@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,7 +19,7 @@ namespace Tournament
 {
     public partial class InsertTeamsWindow : Form
     {
-        public int amountOfTeams = 0;
+        private HttpConnection httpConnection = new HttpConnection();
 
         public InsertTeamsWindow()
         {
@@ -37,17 +38,12 @@ namespace Tournament
 
         }
 
-        private void addTeamButton_Click(object sender, EventArgs e)
+        private async void addTeamButton_Click(object sender, EventArgs e)
         {
-            ConnectionData connectionData = new ConnectionData();
+            HttpConnection httpConnection = new HttpConnection();
 
-            String query1 = "SELECT COUNT(*) FROM teams";
-
-            SqlDataReader sqlDataReader = connectionData.SendInquiry(query1);
-
-            int amountOfTeams = sqlDataReader.GetInt32(0);
-
-            amountOfTeams++;
+            List<Team> teams = httpConnection.GetTeams();
+            int amountOfTeams = teams.Count;
 
             if (amountOfTeams > 32)
             {
@@ -55,107 +51,89 @@ namespace Tournament
 
             } else
             {
-                if (teamNameTextBox.Text != "")
+                if (teamNameTextBox.Text != "" || teamNameTextBox.Text != "")
                 {
-                    String query2 = "INSERT into teams (id_team, name, description, photo) VALUES('" + amountOfTeams + "','" +
-                            teamNameTextBox.Text + "','" + teamDescriptionTextBox.Text + "')";
-
-                    connectionData.closeConnection();
-                    connectionData.setData(query2);
-                    connectionData.closeReader();
-
-                    MessageBox.Show("Added the team");
-                } else
+                    var teamForCreation = new TeamForCreation() { Name = teamNameTextBox.Text, Description = teamDescriptionTextBox.Text };
+                    await httpConnection.CreateTeam(teamForCreation);
+                }
+                else
                 {
                     MessageBox.Show("You have to enter the team name.");
                 }
-            }         
+
+                MessageBox.Show("Added the team!");
+            }
         }
 
-        private void deleteTeamButton_Click(object sender, EventArgs e)
+        private async void deleteTeamButton_Click(object sender, EventArgs e)
         {
-            String query = "DELETE from teams WHERE name_team = '" + teamName.Text + "'";
+            List<Team> teams = httpConnection.GetTeams();
+            var team = teams.FirstOrDefault(t => t.Name == teamNameTextBox.Text);
 
-            ConnectionData connectionData = new ConnectionData();
+            await httpConnection.DeleteTeamAsync(team.Id);
 
-            connectionData.setData(query);
+            MessageBox.Show("Deleted the team!");
         }
 
-        private void addMissingTeamsButton_Click(object sender, EventArgs e)
+        private async void addMissingTeamsButton_Click(object sender, EventArgs e)
         {
-            ConnectionData connectionData = new ConnectionData();
-
-            String query1 = "SELECT COUNT(*) FROM teams";
-
-            SqlDataReader sqlDataReader = connectionData.SendInquiry(query1);
-
-            int amountOfTeams = sqlDataReader.GetInt32(0);
+            List<Team> teams = httpConnection.GetTeams();
+            int amountOfTeams = teams.Count;
 
             if (amountOfTeams < 32)
             {
-                int amountOfTeamsToCreate = 32 - amountOfTeams;
-
-                for (int i = 0; i < amountOfTeamsToCreate; i++)
+                for (int i = amountOfTeams + 1; i < 33; i++)
                 {
-                    amountOfTeams++;
-                    String query = "INSERT into teams (id_team, name) VALUES('" + amountOfTeams + "','" + "Team" + amountOfTeams + "')";
-
-                    connectionData.closeConnection();
-                    connectionData.setData(query);
+                    var teamForCreation = new TeamForCreation() { Name = "TeamExample" + i, Description = "Description" + i};
+                    await httpConnection.CreateTeam(teamForCreation);
                 }
-                connectionData.closeReader();
 
                 MessageBox.Show("New teams have been created!");
-
-            } else if (amountOfTeams == 32)
+            }
+            else if (amountOfTeams == 32)
             {
                 MessageBox.Show("There are already 32 teams!");
             }
         }
 
-        private void randomTeamsButton_Click(object sender, EventArgs e)
+        private async void randomTeamsButton_Click(object sender, EventArgs e)
         {
-            ConnectionData connectionData = new ConnectionData();
+            List<Team> teams = httpConnection.GetTeams();
+            int amountOfTeams = teams.Count;
 
-            String query1 = "SELECT COUNT(*) FROM teams";
-            SqlDataReader sqlDataReader1 = connectionData.SendInquiry(query1);
+            string[] lettersTable = { "A", "B", "C", "D", "E", "F", "G", "H" };
+            List<string> letters = new List<string>(lettersTable);
 
-            int amountOfTeams = sqlDataReader1.GetInt32(0);
-            connectionData.closeConnection();
+            Random random = new Random();
+            List<Group> groups = new List<Group>();
 
             if (amountOfTeams == 32)
             {
-                String query2 = "SELECT * FROM teams";
-                SqlDataReader sqlDataReader2 = connectionData.SendInquiry(query2);
-
-                List<int> idTeamsList = new List<int>();
-
-                do
+                foreach (string letter in letters)
                 {
-                    idTeamsList.Add(sqlDataReader2.GetInt32(0));
+                    var group = new Group() { Name = letter };
+                    await httpConnection.CreateGroup(group);
+                    teams = teams.OrderBy(item => random.Next()).ToList();
+                    groups = httpConnection.GetGroups();
+                    var groupForTeams = groups.FirstOrDefault(t => t.Name == letter);
 
-                } while (sqlDataReader2.Read());
-
-                Random random = new Random();
-
- 
-                for (int i = 1; i < 9; i++)
-                {
-                    for (int j = 1; j < 5; j++)
+                    for (int i = 0; i < 4; i++)
                     {
-                        int randomlyTeam = random.Next(idTeamsList.Count);
+                        var team = new Team() { Id = teams[i].Id, GroupId = groupForTeams.Id };
+                        await httpConnection.UpdateTeamAsync(team);
 
-                        String query = "INSERT into q" + i + " (id_q" + i + ", id_team) VALUES('" + j + "','" + idTeamsList[randomlyTeam] + "')";
-
-                        connectionData.closeConnection();
-                        connectionData.setData(query);
-
-                        idTeamsList.RemoveAt(randomlyTeam);
+                        if (i == 3)
+                        {
+                            teams.Remove(teams[i]);
+                            teams.Remove(teams[i-1]);
+                            teams.Remove(teams[i-2]);
+                            teams.Remove(teams[i-3]);
+                        }
                     }
+
                 }
 
                 MessageBox.Show("Teams for each group were drawn at random!");
-
             } else
             {
                 MessageBox.Show("No 32 teams added!");

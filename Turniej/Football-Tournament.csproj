@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\ConnectionData.cs" />
+    <Compile Include="Group.cs" />
+    <Compile Include="Data\HttpConnection.cs" />
     <Compile Include="KnockoutStageWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +87,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Team.cs" />
+    <Compile Include="TeamForCreation.cs" />
     <EmbeddedResource Include="InsertResultsWindow.resx">
       <DependentUpon>InsertResultsWindow.cs</DependentUpon>
     </EmbeddedResource>
